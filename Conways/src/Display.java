@@ -60,11 +60,20 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		repaint();
 	}
 
+	private boolean green = false;
+	
 
 	public void paintComponent(Graphics g) {
 		final int TIME_BETWEEN_REPLOTS = 100; // change to your liking
 
-		g.setColor(Color.BLACK);
+		if (green){
+			g.setColor(Color.GREEN);
+			green = false;
+		}
+		else{
+			g.setColor(Color.BLACK);
+			green = true;
+		}
 		drawGrid(g);
 		drawCells(g);
 		drawButtons();
