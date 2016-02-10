@@ -1,8 +1,3 @@
-/*
- * Created on Dec 1, 2004
- * Latest update: June 24, 2010
- */
-
 import javax.swing.JFrame;
 
 public class Main {

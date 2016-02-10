@@ -1,8 +1,3 @@
-/*
- * Created on Dec 1, 2004
- * Last update: June 24, 2010
- */
-
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -12,7 +7,7 @@ public class Cell {
 	private int myNeighbors; // count of neighbors with respect to x,y
 	private boolean myAliveNextTurn; // Used for state in next iteration
 	private Color myColor; // Based on alive/dead rules
-	private final Color DEFAULT_ALIVE = Color.ORANGE;
+	private final Color DEFAULT_ALIVE = Color.RED;
 	private final Color DEFAULT_DEAD = Color.GRAY;
 
 	public Cell(int x, int y) {
@@ -72,11 +67,35 @@ public class Cell {
 	}
 
 	public void calcNeighbors(Cell[][] cell) {
-		// You write this
+		myNeighbors = 0;
+		try{
+			if (cell[this.myY-1][this.myX-1].getAlive() && getX()>0 && getY()>0) myNeighbors++;
+		} catch(Exception e){}
+		try{
+			if (cell[this.myY][this.myX-1].getAlive() && getX()>0) myNeighbors++;
+		} catch(Exception e){}
+		try{
+			if (cell[this.myY+1][this.myX+1].getAlive()) myNeighbors++;
+		} catch(Exception e){}
+		try{
+			if (cell[this.myY-1][this.myX].getAlive()) myNeighbors++;
+		} catch(Exception e){}
+		try{
+			if (cell[this.myY+1][this.myX].getAlive()) myNeighbors++;
+		} catch(Exception e){}
+		try{
+			if (cell[this.myY-1][this.myX+1].getAlive()) myNeighbors++;
+		} catch(Exception e){}
+		try{
+			if (cell[this.myY][this.myX+1].getAlive()) myNeighbors++;
+		} catch(Exception e){}
+		try{
+			if (cell[this.myY+1][this.myX+1].getAlive()) myNeighbors++;
+		} catch(Exception e){}
 	}
+	
 
-	public void draw(int x_offset, int y_offset, int width, int height,
-			Graphics g) {
+	public void draw(int x_offset, int y_offset, int width, int height, Graphics g) {
 		// I leave this understanding to the reader
 		int xleft = x_offset + 1 + (myX * (width + 1));
 		int xright = x_offset + width + (myX * (width + 1));

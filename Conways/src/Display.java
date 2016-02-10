@@ -1,9 +1,3 @@
-/*
- * Created on May 24, 2004
- *
- * Latest update on April 21, 2011
- */
- 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -27,8 +21,8 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	public static Cell[][] cell = new Cell[ROWS][COLS];
 	private final int X_GRID_OFFSET = 25; // 25 pixels from left
 	private final int Y_GRID_OFFSET = 40; // 40 pixels from top
-	private final int CELL_WIDTH = 5;
-	private final int CELL_HEIGHT = 5;
+	private final int CELL_WIDTH = 6;
+	private final int CELL_HEIGHT = 6;
 
 	// Note that a final field can be initialized in constructor
 	private final int DISPLAY_WIDTH;   
@@ -66,14 +60,7 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	public void paintComponent(Graphics g) {
 		final int TIME_BETWEEN_REPLOTS = 100; // change to your liking
 
-		if (green){
-			g.setColor(Color.GREEN);
-			green = false;
-		}
-		else{
-			g.setColor(Color.BLACK);
-			green = true;
-		}
+		g.setColor(Color.BLACK);
 		drawGrid(g);
 		drawCells(g);
 		drawButtons();
@@ -148,12 +135,28 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 
 
 	private void nextGeneration() {
+		for (Cell[] columns : cell){
 
+			for (Cell rowCell : columns){
+				rowCell.calcNeighbors(cell);
+				if (rowCell.getAlive() && rowCell.getNeighbors() < 2) 
+					rowCell.setAlive(false);
+				if (rowCell.getAlive() && (rowCell.getNeighbors() == 2 || rowCell.getNeighbors() == 3))
+					rowCell.setAlive(true);
+				if (rowCell.getAlive() && rowCell.getNeighbors() > 3) 
+					rowCell.setAlive(false);
+				if (!rowCell.getAlive() && rowCell.getNeighbors() == 3) 
+					rowCell.setAlive(true);
+			}
+		}
 	}
 
 
 	public void mouseClicked(MouseEvent arg0) {
-
+		int xCellGuess = (int) (arg0.getX() - X_GRID_OFFSET)/(CELL_WIDTH + 1);
+		int yCellGuess = (int) (arg0.getY() - Y_GRID_OFFSET)/(CELL_HEIGHT + 1 );
+		cell[yCellGuess][xCellGuess].setAlive(!(cell[yCellGuess][xCellGuess].getAlive()));
+		repaint();
 	}
 
 
@@ -176,9 +179,12 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 
 	}
 
-
+	
 	public void mouseDragged(MouseEvent arg0) {
-
+		int xCellGuess = (int) (arg0.getX() - X_GRID_OFFSET)/(CELL_WIDTH + 1);
+		int yCellGuess = (int) (arg0.getY() - Y_GRID_OFFSET)/(CELL_HEIGHT + 1 );
+		cell[yCellGuess][xCellGuess].setAlive(!(cell[yCellGuess][xCellGuess].getAlive()));
+		repaint();
 	}
 
 
