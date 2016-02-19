@@ -13,26 +13,25 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JRadioButton;
 
-// Note that the JComponent is set up to listen for mouse clicks
-// and mouse movement.  To achieve this, the MouseListener and
-// MousMotionListener interfaces are implemented and there is additional
-// code in init() to attach those interfaces to the JComponent.
-
 
 public class Display extends JComponent implements MouseListener, MouseMotionListener {
+	
+	/**
+	 * Constants.
+	 */
 	public static final int ROWS = 80;
 	public static final int COLS = 100;
 	public static Cell[][] cell = new Cell[ROWS][COLS];
-	private final int X_GRID_OFFSET = 25; // 25 pixels from left
-	private final int Y_GRID_OFFSET = 40; // 40 pixels from top
+	private final int X_GRID_OFFSET = 25;
+	private final int Y_GRID_OFFSET = 40;
 	private final int CELL_WIDTH = 6;
 	private final int CELL_HEIGHT = 6;
-	private final int BUTTON_ROW_DEPTH = 550; //how far down the button is
-	
-	// Note that a final field can be initialized in constructor
+	private final int BUTTON_ROW_DEPTH = 600; //how far down the button is
 	private final int DISPLAY_WIDTH;   
 	private final int DISPLAY_HEIGHT;
-	private boolean paintloop = false;
+	/**
+	 * End Constants.
+	 */
 	
 	/**
 	 * All the buttons.
@@ -40,9 +39,24 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	private StartButton startStop;
 	private WrapButton wrapButton;
 	private Killer killButton;
-	
-	public static boolean wrap = true;
+	/**
+	 * End Buttons.
+	 */
 
+	/**
+	 * Variables
+	 */
+	private boolean paintloop = false;
+	public static boolean wrap = true;
+	/**
+	 * End Variables.
+	 */
+	
+	/**
+	 * Constructor for the display.
+	 * @param width: the display width
+	 * @param height: the display height
+	 */
 	public Display(int width, int height) {
 		DISPLAY_WIDTH = width;
 		DISPLAY_HEIGHT = height;
@@ -75,8 +89,6 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		killButton.setBounds(350, BUTTON_ROW_DEPTH, 100, 36);
 		add(killButton);
 		killButton.setVisible(true);
-		
-		
 		repaint();
 	}
 
@@ -193,7 +205,9 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	public void mouseClicked(MouseEvent arg0) {
 		int xCellGuess = (int) (arg0.getX() - X_GRID_OFFSET)/(CELL_WIDTH + 1);
 		int yCellGuess = (int) (arg0.getY() - Y_GRID_OFFSET)/(CELL_HEIGHT + 1 );
-		cell[yCellGuess][xCellGuess].setAlive(!(cell[yCellGuess][xCellGuess].getAlive()));
+		try{
+			cell[yCellGuess][xCellGuess].setAlive(!(cell[yCellGuess][xCellGuess].getAlive()));
+		}catch(Exception e){} //swallow the error if they click outside of the grid
 		repaint();
 	}
 
@@ -239,6 +253,7 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	
 
 	private class StartButton extends JButton implements ActionListener {
+		
 		StartButton() {
 			super("Start");
 			addActionListener(this);
@@ -261,6 +276,7 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	 * The wrap on/off button
 	 */
 	private class WrapButton extends JButton implements ActionListener {
+
 		WrapButton() {
 			super("Wrap Off");
 			addActionListener(this);
@@ -277,6 +293,7 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	}
 	
 	private class Killer extends JButton implements ActionListener {
+		
 		Killer() {
 			super("Kill");
 			addActionListener(this);
@@ -291,7 +308,6 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 			}
 			repaint();
 		}
-		
 	}
 	
 
