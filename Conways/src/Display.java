@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -29,7 +30,8 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	private final int DISPLAY_HEIGHT;
 	private StartButton startStop;
 	private boolean paintloop = false;
-
+	
+	public static boolean wrap = true;
 
 	public Display(int width, int height) {
 		DISPLAY_WIDTH = width;
@@ -54,11 +56,11 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		repaint();
 	}
 
-	private boolean green = false;
+	
 	
 
 	public void paintComponent(Graphics g) {
-		final int TIME_BETWEEN_REPLOTS = 100; // change to your liking
+		final int TIME_BETWEEN_REPLOTS = 200; // change to your liking
 
 		g.setColor(Color.BLACK);
 		drawGrid(g);
@@ -76,14 +78,14 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		}
 	}
 
-
+	// cell[80][100]
 	public void initCells() {
 		for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLS; col++) {
 				cell[row][col] = new Cell(row, col);
 			}
 		}
-		
+		cell[1][10].setAlive(true);
 		cell[36][22].setAlive(true); // sample use of cell mutator method
 		cell[36][23].setAlive(true); // sample use of cell mutator method
 		cell[36][24].setAlive(true); // sample use of cell mutator method
@@ -134,24 +136,34 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	}
 
 
-	private void nextGeneration() {
-		for (Cell[] columns : cell){
+	private void nextGeneration() {	
+		calcAliveNextTurn();
+		for (int row = 0; row < ROWS; row++) {
+			for (int col = 0; col < COLS; col++) {
+				cell[row][col].setAlive(cell[row][col].getAliveNextTurn());
+			}
+		}		
+	}
 
-			for (Cell rowCell : columns){
-				rowCell.calcNeighbors(cell);
-				if (rowCell.getAlive() && rowCell.getNeighbors() < 2) 
-					rowCell.setAlive(false);
-				if (rowCell.getAlive() && (rowCell.getNeighbors() == 2 || rowCell.getNeighbors() == 3))
-					rowCell.setAlive(true);
-				if (rowCell.getAlive() && rowCell.getNeighbors() > 3) 
-					rowCell.setAlive(false);
-				if (!rowCell.getAlive() && rowCell.getNeighbors() == 3) 
-					rowCell.setAlive(true);
+	public void calcAliveNextTurn(){
+		for (int row = 0; row < ROWS; row++) {
+			for (int col = 0; col < COLS; col++) {
+				cell[row][col].calcNeighbors(cell);
+				if (cell[row][col].getAlive() && cell[row][col].getNeighbors() < 2) 
+					cell[row][col].setAliveNextTurn(false);
+				if (cell[row][col].getAlive() && (cell[row][col].getNeighbors() == 2 || cell[row][col].getNeighbors() == 3))
+					cell[row][col].setAliveNextTurn(true);
+				if (cell[row][col].getAlive() && cell[row][col].getNeighbors() > 3) 
+					cell[row][col].setAliveNextTurn(false);
+				if (!cell[row][col].getAlive() && cell[row][col].getNeighbors() == 3) 
+					cell[row][col].setAliveNextTurn(true);
 			}
 		}
 	}
-
-
+	
+	/**
+	 * Mouse clicked method.
+	 */
 	public void mouseClicked(MouseEvent arg0) {
 		int xCellGuess = (int) (arg0.getX() - X_GRID_OFFSET)/(CELL_WIDTH + 1);
 		int yCellGuess = (int) (arg0.getY() - Y_GRID_OFFSET)/(CELL_HEIGHT + 1 );
@@ -179,17 +191,24 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 
 	}
 
-	
+	/**
+	 * Mouse dragged method.
+	 */
 	public void mouseDragged(MouseEvent arg0) {
 		int xCellGuess = (int) (arg0.getX() - X_GRID_OFFSET)/(CELL_WIDTH + 1);
 		int yCellGuess = (int) (arg0.getY() - Y_GRID_OFFSET)/(CELL_HEIGHT + 1 );
-		cell[yCellGuess][xCellGuess].setAlive(!(cell[yCellGuess][xCellGuess].getAlive()));
+		try{
+			cell[yCellGuess][xCellGuess].setAlive(!(cell[yCellGuess][xCellGuess].getAlive()));
+		}
+		catch(ArrayIndexOutOfBoundsException e){
+			//Click outside
+		}
 		repaint();
 	}
 
 
 	public void mouseMoved(MouseEvent arg0) {
-		
+		return;
 	}
 	
 
