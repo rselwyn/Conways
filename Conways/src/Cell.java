@@ -68,7 +68,7 @@ public class Cell {
 	}
 
 	/**
-	 * Calculate the neighbors
+	 * Calculate the neighbors.  
 	 * @param cell: the array of Cell objects
 	 */
 	public void calcNeighbors(Cell[][] cell) {	
@@ -98,6 +98,16 @@ public class Cell {
 		
 	}
 	
+	/**
+	 * Draw a cell on the grid.
+	 * 
+	 * The Offsets:
+	 * @param x_offset
+	 * @param y_offset
+	 * @param width
+	 * @param height
+	 * @param g
+	 */
 	public void draw(int x_offset, int y_offset, int width, int height, Graphics g) {
 		// I leave this understanding to the reader
 		int xleft = x_offset + 1 + (myX * (width + 1));

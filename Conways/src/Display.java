@@ -5,10 +5,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JRadioButton;
 
 // Note that the JComponent is set up to listen for mouse clicks
 // and mouse movement.  To achieve this, the MouseListener and
@@ -24,12 +27,19 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	private final int Y_GRID_OFFSET = 40; // 40 pixels from top
 	private final int CELL_WIDTH = 6;
 	private final int CELL_HEIGHT = 6;
-
+	private final int BUTTON_ROW_DEPTH = 550; //how far down the button is
+	
 	// Note that a final field can be initialized in constructor
 	private final int DISPLAY_WIDTH;   
 	private final int DISPLAY_HEIGHT;
-	private StartButton startStop;
 	private boolean paintloop = false;
+	
+	/**
+	 * All the buttons.
+	 */
+	private StartButton startStop;
+	private WrapButton wrapButton;
+	private Killer killButton;
 	
 	public static boolean wrap = true;
 
@@ -46,13 +56,27 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 
 		addMouseListener(this);
 		addMouseMotionListener(this);
-
-		// Example of setting up a button.
-		// See the StartButton class nested below.
+		
+		/**
+		 * Add the buttons.
+		 */
+		//Start stop button
 		startStop = new StartButton();
-		startStop.setBounds(100, 550, 100, 36);
+		startStop.setBounds(100, BUTTON_ROW_DEPTH, 100, 36);	
 		add(startStop);
 		startStop.setVisible(true);
+		//wrap button
+		wrapButton = new WrapButton();
+		wrapButton.setBounds(225, BUTTON_ROW_DEPTH, 100, 36);
+		add(wrapButton);
+		wrapButton.setVisible(true);
+		//kill button
+		killButton = new Killer();
+		killButton.setBounds(350, BUTTON_ROW_DEPTH, 100, 36);
+		add(killButton);
+		killButton.setVisible(true);
+		
+		
 		repaint();
 	}
 
@@ -133,6 +157,8 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 
 	private void drawButtons() {
 		startStop.repaint();
+		wrapButton.repaint();
+		killButton.repaint();
 	}
 
 
@@ -230,4 +256,43 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 			repaint();
 		}
 	}
+	
+	/**
+	 * The wrap on/off button
+	 */
+	private class WrapButton extends JButton implements ActionListener {
+		WrapButton() {
+			super("Wrap Off");
+			addActionListener(this);
+		}
+		
+		public void actionPerformed(ActionEvent arg0) {
+			if (this.getText().equals("Wrap Off")) {
+				setText("Wrap On");
+			} else {
+				setText("Wrap Off");
+			}
+			repaint();
+		}
+	}
+	
+	private class Killer extends JButton implements ActionListener {
+		Killer() {
+			super("Kill");
+			addActionListener(this);
+		}
+		
+		public void actionPerformed(ActionEvent arg0) {
+			for (Cell[] cells : cell){
+				for (Cell c : cells){
+					c.setAliveNextTurn(false);
+					c.setAlive(false);
+				}
+			}
+			repaint();
+		}
+		
+	}
+	
+
 }
