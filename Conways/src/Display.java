@@ -11,6 +11,7 @@ import java.util.Scanner;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 
 
@@ -63,7 +64,9 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		init();
 	}
 
-
+	/**
+	 * Set the size.
+	 */
 	public void init() {
 		setSize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
 		initCells();
@@ -94,9 +97,9 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 
 	
 	
-
+	
 	public void paintComponent(Graphics g) {
-		final int TIME_BETWEEN_REPLOTS = 200; // change to your liking
+		final int TIME_BETWEEN_REPLOTS = 100; // change to your liking
 
 		g.setColor(Color.BLACK);
 		drawGrid(g);
@@ -114,7 +117,9 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		}
 	}
 
-	// cell[80][100]
+	/**
+	 * Initialize the cells at the start.
+	 */
 	public void initCells() {
 		for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLS; col++) {
@@ -127,7 +132,7 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		cell[36][24].setAlive(true); // sample use of cell mutator method
 	}
 
-
+	
 	public void togglePaintLoop() {
 		paintloop = !paintloop;
 	}
@@ -137,7 +142,10 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		paintloop = value;
 	}
 
-
+	/**
+	 * Draw the grid (lines).
+	 * @param g: the graphics object
+	 */
 	void drawGrid(Graphics g) {
 		for (int row = 0; row <= ROWS; row++) {
 			g.drawLine(X_GRID_OFFSET,
@@ -304,11 +312,33 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 				for (Cell c : cells){
 					c.setAliveNextTurn(false);
 					c.setAlive(false);
+					repaint();
 				}
 			}
 			repaint();
+			if (startStop.getText().equals("stop")){
+				startStop.actionPerformed(arg0);
+			}
+			
 		}
 	}
+	
+	/**
+	 * The superclass for labels that takes in the type and gets updated 
+	 * with a generic parameter.
+	 */
+	private class FieldLabel extends JLabel{
+		private final String title; 
+		
+		public FieldLabel(String title){
+			this.title = title;			
+		}
+		
+		public < E > void update(E data) {
+		    this.setText(title + ": " + data);
+		}
+	}
+	
 	
 
 }
