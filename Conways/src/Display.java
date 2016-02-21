@@ -40,6 +40,7 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	private StartButton startStop;
 	private WrapButton wrapButton;
 	private Killer killButton;
+	private Population pop;
 	/**
 	 * End Buttons.
 	 */
@@ -49,6 +50,7 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	 */
 	private boolean paintloop = false;
 	public static boolean wrap = true;
+	public int population = 10;
 	/**
 	 * End Variables.
 	 */
@@ -92,6 +94,9 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		killButton.setBounds(350, BUTTON_ROW_DEPTH, 100, 36);
 		add(killButton);
 		killButton.setVisible(true);
+		pop = new Population("Population");
+		pop.setBounds(475, BUTTON_ROW_DEPTH, 100, 36);
+		add(pop);
 		repaint();
 	}
 
@@ -179,16 +184,22 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		startStop.repaint();
 		wrapButton.repaint();
 		killButton.repaint();
+		pop.update(getPopulation());
 	}
 
 
 	private void nextGeneration() {	
+		int setpop = 0;
 		calcAliveNextTurn();
 		for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLS; col++) {
 				cell[row][col].setAlive(cell[row][col].getAliveNextTurn());
+				if (cell[row][col].getAliveNextTurn()){
+					setpop++;
+				}
 			}
-		}		
+		}	
+		setPopulation(setpop);
 	}
 
 	public void calcAliveNextTurn(){
@@ -323,22 +334,40 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		}
 	}
 	
+	public void setPopulation(int pop){
+		this.population = pop;
+	}
+	
+	public int getPopulation(){
+		return this.population;
+	}
+	
 	/**
-	 * The superclass for labels that takes in the type and gets updated 
-	 * with a generic parameter.
+	 * Abstract class for an updating label.
 	 */
-	private class FieldLabel extends JLabel{
-		private final String title; 
+	private abstract class UpdatingLabel extends JLabel{
+		protected String title;
 		
-		public FieldLabel(String title){
-			this.title = title;			
+		public UpdatingLabel(String title) {
+			this.title = title;
 		}
 		
-		public < E > void update(E data) {
-		    this.setText(title + ": " + data);
+		/**
+		 * Using generics because the fields could be different. 
+		 * @param param
+		 */
+		public abstract <E> void update(E param);
+	}
+	
+	private class Population extends UpdatingLabel{
+		public Population(String title) {
+			super(title);
+			// TODO Auto-generated constructor stub
+		}
+		@Override
+		public <E> void update(E param) {
+			this.setText(this.title + ": " + param);
 		}
 	}
 	
-	
-
 }
