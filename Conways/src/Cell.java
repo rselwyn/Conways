@@ -95,7 +95,19 @@ public class Cell {
 	 * @param y
 	 */
 	public void wrapNeighbor(Cell[][] cells, int x, int y){
-		
+		if (x == Display.COLS){
+			x=0;
+		}
+		if (y == Display.ROWS){
+			y=0;
+		}
+		if (x==-1){
+			x = Display.COLS-1;
+		}
+		if (y==-1){
+			y = Display.ROWS-1;
+		}	
+		if (cells[y][x].getAlive()) myNeighbors++;
 	}
 	
 	/**

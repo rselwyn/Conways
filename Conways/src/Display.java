@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -40,7 +41,8 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	private StartButton startStop;
 	private WrapButton wrapButton;
 	private Killer killButton;
-	private Population pop;
+	private UpdatingLabel pop;
+	private UpdatingLabel difference;
 	/**
 	 * End Buttons.
 	 */
@@ -49,8 +51,8 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	 * Variables
 	 */
 	private boolean paintloop = false;
-	public static boolean wrap = true;
-	public int population = 10;
+	public static boolean wrap = false;
+	public ArrayList<Integer> population = new ArrayList<Integer>();
 	/**
 	 * End Variables.
 	 */
@@ -96,7 +98,13 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		killButton.setVisible(true);
 		pop = new Population("Population");
 		pop.setBounds(475, BUTTON_ROW_DEPTH, 100, 36);
+		this.population.add(0); //we have to add the first index in
+		this.population.add(0); //we have to add the second index in so to not throw a diff error
 		add(pop);
+		difference = new DifferenceBetweenGeneration("Difference");
+		difference.setBounds(600, BUTTON_ROW_DEPTH, 100, 36);
+		add(difference);
+		
 		repaint();
 	}
 
@@ -184,7 +192,8 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		startStop.repaint();
 		wrapButton.repaint();
 		killButton.repaint();
-		pop.update(getPopulation());
+		pop.update(this.population.get(this.population.size() - 1));
+		difference.update(this.population.get(this.population.size() - 1) - this.population.get(this.population.size() - 2));
 	}
 
 
@@ -199,7 +208,7 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 				}
 			}
 		}	
-		setPopulation(setpop);
+		addPopulationMember(setpop);
 	}
 
 	public void calcAliveNextTurn(){
@@ -304,8 +313,10 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		public void actionPerformed(ActionEvent arg0) {
 			if (this.getText().equals("Wrap Off")) {
 				setText("Wrap On");
+				Display.wrap = true;
 			} else {
 				setText("Wrap Off");
+				Display.wrap = false;
 			}
 			repaint();
 		}
@@ -334,12 +345,12 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		}
 	}
 	
-	public void setPopulation(int pop){
-		this.population = pop;
-	}
-	
-	public int getPopulation(){
-		return this.population;
+	/**
+	 * Add to the population arraylist
+	 * @param pop
+	 */
+	public void addPopulationMember(int pop){
+		this.population.add(pop);
 	}
 	
 	/**
@@ -364,10 +375,28 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 			super(title);
 			// TODO Auto-generated constructor stub
 		}
+		
 		@Override
 		public <E> void update(E param) {
 			this.setText(this.title + ": " + param);
 		}
 	}
+	
+	private class DifferenceBetweenGeneration extends UpdatingLabel{
+
+		public DifferenceBetweenGeneration(String title) {
+			super(title);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public <E> void update(E param) {
+			this.setText(this.title +": " + param);
+		}
+		
+		
+	}
+	
+	
 	
 }
