@@ -7,8 +7,8 @@ public class Cell {
 	private int myNeighbors; // count of neighbors with respect to x,y
 	private boolean myAliveNextTurn; // Used for state in next iteration
 	private Color myColor; // Based on alive/dead rules
-	private final Color DEFAULT_ALIVE = Color.GREEN;
-	private final Color DEFAULT_DEAD = Color.GRAY;
+	public Color DEFAULT_ALIVE = Color.GREEN;
+	public Color DEFAULT_DEAD = Color.GRAY;
 
 	
 	public Cell(int x, int y) {
@@ -37,7 +37,11 @@ public class Cell {
 	public Color getColor() {
 		return myColor;
 	}
-
+	
+	/**
+	 * Sets alive to the parameter
+	 * @param alive
+	 */
 	public void setAlive(boolean alive) {
 		if (alive) {
 			setAlive(true, DEFAULT_ALIVE);
@@ -45,24 +49,47 @@ public class Cell {
 			setAlive(false, DEFAULT_DEAD);
 		}
 	}
-
+	
+	/**
+	 * Overloaded method
+	 * Sets alive and color
+	 * @param alive: alive or not
+	 * @param color: the color
+	 */
 	public void setAlive(boolean alive, Color color) {
 		myColor = color;
 		myAlive = alive;
 	}
 
+	/**
+	 * Sets the alive next turn.
+	 * @param alive: the boolean state to set
+	 */
 	public void setAliveNextTurn(boolean alive) {
 		myAliveNextTurn = alive;
 	}
 
+	/**
+	 * Gets the alive next turn
+	 * @return the boolean on whether or not this should or shouldn't be
+	 * alive next turn.
+	 */
 	public boolean getAliveNextTurn() {
 		return myAliveNextTurn;
 	}
-
+	
+	/**
+	 * Set the color
+	 * @param color
+	 */
 	public void setColor(Color color) {
 		myColor = color;
 	}
 
+	/**
+	 * Get the neighbor instance variable
+	 * @return the neighbors
+	 */
 	public int getNeighbors() {
 		return myNeighbors;
 	}
@@ -89,10 +116,11 @@ public class Cell {
 	}
 	
 	/**
-	 * TODO
-	 * @param cells
-	 * @param x
-	 * @param y
+	 * If the calcneighbors method sees that the neighbor is off the grid (and wrapping is on),
+	 * this method will be called. 
+	 * @param cells: the cell array
+	 * @param x: the x position of the cell neighbor (not wrapped)
+	 * @param y: the y position of the cell neighbor (not wrapped)
 	 */
 	public void wrapNeighbor(Cell[][] cells, int x, int y){
 		if (x == Display.COLS){

@@ -43,6 +43,7 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	private Killer killButton;
 	private UpdatingLabel pop;
 	private UpdatingLabel difference;
+	private ColorPicker cp;
 	/**
 	 * End Buttons.
 	 */
@@ -104,6 +105,9 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		difference = new DifferenceBetweenGeneration("Difference");
 		difference.setBounds(600, BUTTON_ROW_DEPTH, 100, 36);
 		add(difference);
+		cp = new ColorPicker();
+		cp.setBounds(100, BUTTON_ROW_DEPTH+40, 100, 36);
+		add(cp);
 		
 		repaint();
 	}
@@ -118,7 +122,6 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		drawGrid(g);
 		drawCells(g);
 		drawButtons();
-
 		if (paintloop) {
 			try {
 				Thread.sleep(TIME_BETWEEN_REPLOTS);
@@ -194,6 +197,8 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		killButton.repaint();
 		pop.update(this.population.get(this.population.size() - 1));
 		difference.update(this.population.get(this.population.size() - 1) - this.population.get(this.population.size() - 2));
+		cp.update();
+		repaint();
 	}
 
 
@@ -397,6 +402,38 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		
 	}
 	
+	private class ColorPicker extends JComboBox{
+		@SuppressWarnings("unchecked")
+		ColorPicker(){
+			this.addItem("Red");
+			this.addItem("Green");
+			this.addItem("Black");
+			this.addItem("Blue");
+		}
+		
+		private void update(){
+			if (this.getSelectedItem().toString().equals("Red")){
+				changeColor(Color.RED);
+			}
+			if (this.getSelectedItem().toString().equals("Green")){
+				changeColor(Color.GREEN);
+			}
+			if (this.getSelectedItem().toString().equals("Black")){
+				changeColor(Color.BLACK);
+			}
+			if (this.getSelectedItem().toString().equals("Blue")){
+				changeColor(Color.BLUE);
+			}
+		}
+		
+		private void changeColor(Color c){
+			for (Cell[] ce : cell){
+				for (Cell b : ce){
+					b.DEFAULT_ALIVE = c;
+				}
+			}
+		}
+	}
 	
 	
 }
