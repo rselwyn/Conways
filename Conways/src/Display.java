@@ -330,7 +330,7 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	private class Killer extends JButton implements ActionListener {
 		
 		Killer() {
-			super("Kill");
+			super("Clear");
 			addActionListener(this);
 		}
 		
@@ -402,6 +402,9 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		
 	}
 	
+	/**
+	 * The color picker.
+	 */
 	private class ColorPicker extends JComboBox{
 		@SuppressWarnings("unchecked")
 		ColorPicker(){
@@ -409,6 +412,8 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 			this.addItem("Green");
 			this.addItem("Black");
 			this.addItem("Blue");
+			this.addItem("Orange");
+			this.addItem("Yellow");
 		}
 		
 		private void update(){
@@ -424,6 +429,12 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 			if (this.getSelectedItem().toString().equals("Blue")){
 				changeColor(Color.BLUE);
 			}
+			if (this.getSelectedItem().toString().equals("Orange")){
+				changeColor(Color.ORANGE);
+			}
+			if (this.getSelectedItem().toString().equals("Yellow")){
+				changeColor(Color.YELLOW);
+			}
 		}
 		
 		private void changeColor(Color c){
@@ -433,6 +444,23 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 				}
 			}
 		}
+	}
+	
+	private class PauseButton extends JButton implements ActionListener{
+		
+		PauseButton(){
+			super("Pause");
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			if (startStop.getText().equals("Stop")){
+				startStop.actionPerformed(e);
+			}
+		}
+		
+		
 	}
 	
 	
