@@ -46,6 +46,7 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	private ColorPicker cp;
 	private PauseButton pause;
 	private CloseButton closer;
+	private StepButton step;
 	/**
 	 * End Buttons.
 	 */
@@ -116,6 +117,9 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		closer = new CloseButton();
 		closer.setBounds(350, BUTTON_ROW_DEPTH+40, 100, 36);
 		add(closer);
+		step = new StepButton();
+		step.setBounds(475, BUTTON_ROW_DEPTH+40, 100, 36);
+		add(step);
 		repaint();
 	}
 
@@ -208,6 +212,7 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		pause.repaint();
 		closer.repaint();
 		repaint();
+		step.repaint();
 	}
 
 
@@ -482,6 +487,21 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 			System.exit(0);
 			repaint();
 		}	
+	}
+	
+	private class StepButton extends JButton implements ActionListener{
+		StepButton(){
+			super("Step");
+			addActionListener(this);
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			nextGeneration();
+			repaint();
+		}
+		
+		
 	}
 	
 }
