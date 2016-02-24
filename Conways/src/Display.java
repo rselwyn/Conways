@@ -44,6 +44,8 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	private UpdatingLabel pop;
 	private UpdatingLabel difference;
 	private ColorPicker cp;
+	private PauseButton pause;
+	private CloseButton closer;
 	/**
 	 * End Buttons.
 	 */
@@ -108,7 +110,12 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		cp = new ColorPicker();
 		cp.setBounds(100, BUTTON_ROW_DEPTH+40, 100, 36);
 		add(cp);
-		
+		pause = new PauseButton();
+		pause.setBounds(225, BUTTON_ROW_DEPTH+40, 100, 36);
+		add(pause);
+		closer = new CloseButton();
+		closer.setBounds(350, BUTTON_ROW_DEPTH+40, 100, 36);
+		add(closer);
 		repaint();
 	}
 
@@ -198,6 +205,8 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		pop.update(this.population.get(this.population.size() - 1));
 		difference.update(this.population.get(this.population.size() - 1) - this.population.get(this.population.size() - 2));
 		cp.update();
+		pause.repaint();
+		closer.repaint();
 		repaint();
 	}
 
@@ -450,18 +459,29 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		
 		PauseButton(){
 			super("Pause");
+			addActionListener(this);
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			if (startStop.getText().equals("Stop")){
+			if (startStop.getText().equals("Stop")) {
 				startStop.actionPerformed(e);
-			}
-		}
-		
-		
+			} 
+		}	
 	}
 	
+	private class CloseButton extends JButton implements ActionListener{
+		
+		CloseButton(){
+			super("Quit");
+			addActionListener(this);
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.exit(0);
+			repaint();
+		}	
+	}
 	
 }
