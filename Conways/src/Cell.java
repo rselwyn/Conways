@@ -22,18 +22,34 @@ public class Cell {
 		myY = row;
 	}
 
+	/**
+	 * Gets if this cell is alive.
+	 * @return the alive state
+	 */
 	public boolean getAlive() {
 		return myAlive;
 	}
-
+	
+	/**
+	 * Get the x position.
+	 * @return the x position.
+	 */
 	public int getX() {
 		return myX;
 	}
-
+	
+	/**
+	 * Get the y position.
+	 * @return the y position
+	 */
 	public int getY() {
 		return myY;
 	}
 
+	/**
+	 * Returns the current color
+	 * @return the color
+	 */
 	public Color getColor() {
 		return myColor;
 	}
@@ -71,7 +87,7 @@ public class Cell {
 
 	/**
 	 * Gets the alive next turn
-	 * @return the boolean on whether or not this should or shouldn't be
+	 * @return the boolean on whether or not this cell should or shouldn't be
 	 * alive next turn.
 	 */
 	public boolean getAliveNextTurn() {
@@ -79,7 +95,7 @@ public class Cell {
 	}
 	
 	/**
-	 * Set the color
+	 * Set the color.
 	 * @param color
 	 */
 	public void setColor(Color color) {
@@ -95,7 +111,10 @@ public class Cell {
 	}
 
 	/**
-	 * Calculate the neighbors.  
+	 * Calculate the neighbors of a cell.  This works
+	 * by iterating over the cells next to it.  It also functions
+	 * without using a try/catch statement by catching out of bounds cells (that can be wrapped).
+	 *   
 	 * @param cell: the array of Cell objects
 	 */
 	public void calcNeighbors(Cell[][] cell) {	
@@ -117,7 +136,7 @@ public class Cell {
 	
 	/**
 	 * If the calcneighbors method sees that the neighbor is off the grid (and wrapping is on),
-	 * this method will be called. 
+	 * this method will be called.  
 	 * @param cells: the cell array
 	 * @param x: the x position of the cell neighbor (not wrapped)
 	 * @param y: the y position of the cell neighbor (not wrapped)
@@ -134,7 +153,7 @@ public class Cell {
 		}
 		if (y==-1){
 			y = Display.ROWS-1;
-		}	
+		}
 		if (cells[y][x].getAlive()) myNeighbors++;
 	}
 	

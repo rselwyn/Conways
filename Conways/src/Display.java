@@ -201,7 +201,9 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		}
 	}
 
-
+	/**
+	 * Calls the update or repaint method in the buttons.
+	 */
 	private void drawButtons() {
 		startStop.repaint();
 		wrapButton.repaint();
@@ -215,7 +217,11 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		step.repaint();
 	}
 
-
+	/**
+	 * Sets the cells alive depending on the calculateAliveNextTurn
+	 * method.  It iterates through the cells, and turns them on or off.
+	 * It also counts the population. 
+	 */
 	private void nextGeneration() {	
 		int setpop = 0;
 		calcAliveNextTurn();
@@ -295,10 +301,12 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 
 
 	public void mouseMoved(MouseEvent arg0) {
-		return;
+
 	}
 	
-
+	/**
+	 * Starts and stops the paint loop.
+	 */
 	private class StartButton extends JButton implements ActionListener {
 		
 		StartButton() {
@@ -320,7 +328,9 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	}
 	
 	/**
-	 * The wrap on/off button
+	 * The wrap on/off button.  When it is clicked, 
+	 * it changes the static boolean in the display class which 
+	 * is accessed by the cells to change wrapping.
 	 */
 	private class WrapButton extends JButton implements ActionListener {
 
@@ -341,6 +351,13 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		}
 	}
 	
+	/**
+	 * Clear button.
+	 * 
+	 * Iterates over all of the cells to turn them off.  It also 
+	 * fixes the start stop button after killing the cells.
+	 * 
+	 */
 	private class Killer extends JButton implements ActionListener {
 		
 		Killer() {
@@ -357,7 +374,7 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 				}
 			}
 			repaint();
-			if (startStop.getText().equals("stop")){
+			if (startStop.getText().equals("Stop")){
 				startStop.actionPerformed(arg0);
 			}
 			
@@ -389,6 +406,9 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		public abstract <E> void update(E param);
 	}
 	
+	/**
+	 * Population size label.
+	 */
 	private class Population extends UpdatingLabel{
 		public Population(String title) {
 			super(title);
@@ -401,13 +421,19 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		}
 	}
 	
+	/**
+	 * The difference label.
+	 */
 	private class DifferenceBetweenGeneration extends UpdatingLabel{
 
 		public DifferenceBetweenGeneration(String title) {
 			super(title);
 			// TODO Auto-generated constructor stub
 		}
-
+		
+		/**
+		 * Use generic parameter so that it can take in multiple data types.
+		 */
 		@Override
 		public <E> void update(E param) {
 			this.setText(this.title +": " + param);
@@ -460,6 +486,9 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		}
 	}
 	
+	/**
+	 * Pauses the game.  It also resets the start/stop button.
+	 */
 	private class PauseButton extends JButton implements ActionListener{
 		
 		PauseButton(){
@@ -475,6 +504,10 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		}	
 	}
 	
+	/**
+	 * Closes the program using
+	 * System.exit()
+	 */
 	private class CloseButton extends JButton implements ActionListener{
 		
 		CloseButton(){
@@ -489,6 +522,11 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		}	
 	}
 	
+	/**
+	 * The step buttons.
+	 * When you click the button, it runs the nextGeneration
+	 * loop.
+	 */
 	private class StepButton extends JButton implements ActionListener{
 		StepButton(){
 			super("Step");
@@ -496,7 +534,9 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
+			/**
+			 * Run the regular nextGeneration method
+			 */
 			nextGeneration();
 			repaint();
 		}
