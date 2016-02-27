@@ -6,14 +6,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JRadioButton;
 
 
 public class Display extends JComponent implements MouseListener, MouseMotionListener {
@@ -21,32 +18,34 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	/**
 	 * Constants.
 	 */
-	public static final int ROWS = 80;
-	public static final int COLS = 100;
-	public static Cell[][] cell = new Cell[ROWS][COLS];
-	private final int X_GRID_OFFSET = 25;
-	private final int Y_GRID_OFFSET = 40;
-	private final int CELL_WIDTH = 6;
-	private final int CELL_HEIGHT = 6;
+	public static final int ROWS = 80; //number of cell rows
+	public static final int COLS = 100; //number of cell cols
+	public static Cell[][] cell = new Cell[ROWS][COLS]; //2 dimensional array of cells with previous constants as sizr
+	private final int X_GRID_OFFSET = 25; //the offset from the left
+	private final int Y_GRID_OFFSET = 40; //the offset from the top
+	private final int CELL_WIDTH = 6; //the cell width
+	private final int CELL_HEIGHT = 6; //the cell height
 	private final int BUTTON_ROW_DEPTH = 600; //how far down the button is
-	private final int DISPLAY_WIDTH;   
-	private final int DISPLAY_HEIGHT;
+	private final int DISPLAY_WIDTH;   //the width of the entire display screen
+	private final int DISPLAY_HEIGHT; //the height of the entire display screen
+	private final int BUTTON_WIDTH = 100; //the button width
+	private final int BUTTON_HEIGHT = 36; //the button height
 	/**
-	 * End Constants.
+	 * End Constants. 
 	 */
 	
 	/**
 	 * All the buttons.
 	 */
-	private StartButton startStop;
-	private WrapButton wrapButton;
-	private Killer killButton;
-	private UpdatingLabel pop;
-	private UpdatingLabel difference;
-	private ColorPicker cp;
-	private PauseButton pause;
-	private CloseButton closer;
-	private StepButton step;
+	private StartButton startStop; //the start/stop button
+	private WrapButton wrapButton; //the wrap button
+	private Killer killButton; //the clear button
+	private UpdatingLabel pop; //the population label
+	private UpdatingLabel difference; //the difference label
+	private ColorPicker cp; //the color picker
+	private PauseButton pause; //the pause button
+	private CloseButton closer; //the close button
+	private StepButton step; //the stop button
 	/**
 	 * End Buttons.
 	 */
@@ -54,9 +53,9 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	/**
 	 * Variables
 	 */
-	private boolean paintloop = false;
-	public static boolean wrap = false;
-	public ArrayList<Integer> population = new ArrayList<Integer>();
+	private boolean paintloop = false; //the paint loop status
+	public static boolean wrap = false; //whether or not to wrap
+	public ArrayList<Integer> population = new ArrayList<Integer>(); //the arraylist containing the population.  Every update cycle, the current population is added
 	/**
 	 * End Variables.
 	 */
@@ -73,7 +72,13 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	}
 
 	/**
-	 * Set the size.
+	 * Initialize the cells and buttons.
+	 * 
+	 * For each Button/Label:
+	 * 	- Initialize the instance variable
+	 *  - set the bounds
+	 *  - add it to the frame
+	 *  - make it visible
 	 */
 	public void init() {
 		setSize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
@@ -87,52 +92,65 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		 */
 		//Start stop button
 		startStop = new StartButton();
-		startStop.setBounds(100, BUTTON_ROW_DEPTH, 100, 36);	
+		startStop.setBounds(100, BUTTON_ROW_DEPTH, BUTTON_WIDTH, BUTTON_HEIGHT);	
 		add(startStop);
 		startStop.setVisible(true);
 		//wrap button
 		wrapButton = new WrapButton();
-		wrapButton.setBounds(225, BUTTON_ROW_DEPTH, 100, 36);
+		wrapButton.setBounds(225, BUTTON_ROW_DEPTH, BUTTON_WIDTH, BUTTON_HEIGHT);
 		add(wrapButton);
 		wrapButton.setVisible(true);
 		//kill button
 		killButton = new Killer();
-		killButton.setBounds(350, BUTTON_ROW_DEPTH, 100, 36);
+		killButton.setBounds(350, BUTTON_ROW_DEPTH, BUTTON_WIDTH, BUTTON_HEIGHT);
 		add(killButton);
 		killButton.setVisible(true);
+		//population label
 		pop = new Population("Population");
-		pop.setBounds(475, BUTTON_ROW_DEPTH, 100, 36);
+		pop.setBounds(475, BUTTON_ROW_DEPTH, BUTTON_WIDTH, BUTTON_HEIGHT);
 		this.population.add(0); //we have to add the first index in
 		this.population.add(0); //we have to add the second index in so to not throw a diff error
 		add(pop);
+		//Difference label
 		difference = new DifferenceBetweenGeneration("Difference");
-		difference.setBounds(600, BUTTON_ROW_DEPTH, 100, 36);
+		difference.setBounds(600, BUTTON_ROW_DEPTH, BUTTON_WIDTH, BUTTON_HEIGHT);
 		add(difference);
+		//color picker
 		cp = new ColorPicker();
-		cp.setBounds(100, BUTTON_ROW_DEPTH+40, 100, 36);
+		cp.setBounds(100, BUTTON_ROW_DEPTH+40, BUTTON_WIDTH, BUTTON_HEIGHT);
 		add(cp);
+		//pause button
 		pause = new PauseButton();
-		pause.setBounds(225, BUTTON_ROW_DEPTH+40, 100, 36);
+		pause.setBounds(225, BUTTON_ROW_DEPTH+40, BUTTON_WIDTH, BUTTON_HEIGHT);
 		add(pause);
+		//close button
 		closer = new CloseButton();
-		closer.setBounds(350, BUTTON_ROW_DEPTH+40, 100, 36);
+		closer.setBounds(350, BUTTON_ROW_DEPTH+40, BUTTON_WIDTH, BUTTON_HEIGHT);
 		add(closer);
+		//step to the next generation
 		step = new StepButton();
-		step.setBounds(475, BUTTON_ROW_DEPTH+40, 100, 36);
+		step.setBounds(475, BUTTON_ROW_DEPTH+40, BUTTON_WIDTH, BUTTON_HEIGHT);
 		add(step);
+		//repaint at the end
 		repaint();
 	}
 
 	
-	
-	
+	/**
+	 * Main paint loop
+	 */
 	public void paintComponent(Graphics g) {
 		final int TIME_BETWEEN_REPLOTS = 100; // change to your liking
-
+		//set the color
 		g.setColor(Color.BLACK);
+		//draw the grid
 		drawGrid(g);
+		//draw the cells
 		drawCells(g);
+		//draw the buttons
 		drawButtons();
+		
+		//update
 		if (paintloop) {
 			try {
 				Thread.sleep(TIME_BETWEEN_REPLOTS);
@@ -159,7 +177,9 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		cell[36][24].setAlive(true); // sample use of cell mutator method
 	}
 
-	
+	/**
+	 * Toggles the paint loop
+	 */
 	public void togglePaintLoop() {
 		paintloop = !paintloop;
 	}
@@ -208,8 +228,12 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 		startStop.repaint();
 		wrapButton.repaint();
 		killButton.repaint();
-		pop.update(this.population.get(this.population.size() - 1));
-		difference.update(this.population.get(this.population.size() - 1) - this.population.get(this.population.size() - 2));
+		pop.update(this.population.get(this.population.size() - 1)); //update the population with the arraylist's last value
+		
+		/**
+		 * Update the difference with the last value of the population subtracted by the second to last value
+		 */
+		difference.update(this.population.get(this.population.size() - 1) - this.population.get(this.population.size() - 2)); 
 		cp.update();
 		pause.repaint();
 		closer.repaint();
@@ -225,17 +249,23 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	private void nextGeneration() {	
 		int setpop = 0;
 		calcAliveNextTurn();
+		//iterate over the cells
 		for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLS; col++) {
+				//set the alive to alive next turn
 				cell[row][col].setAlive(cell[row][col].getAliveNextTurn());
 				if (cell[row][col].getAliveNextTurn()){
-					setpop++;
+					setpop++; //increase the population
 				}
 			}
 		}	
-		addPopulationMember(setpop);
+		addPopulationMember(setpop); //add the population value to the arraylist
 	}
-
+	
+	/**
+	 * Calculate whether or not the cell will be alive 
+	 * next turn using the rules.
+	 */
 	public void calcAliveNextTurn(){
 		for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLS; col++) {
@@ -448,14 +478,18 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 	private class ColorPicker extends JComboBox{
 		@SuppressWarnings("unchecked")
 		ColorPicker(){
-			this.addItem("Red");
+			//add all of the colors to the color picker
 			this.addItem("Green");
+			this.addItem("Red");
 			this.addItem("Black");
 			this.addItem("Blue");
 			this.addItem("Orange");
 			this.addItem("Yellow");
 		}
 		
+		/**
+		 * Looks for the color and then changes the color to that color
+		 */
 		private void update(){
 			if (this.getSelectedItem().toString().equals("Red")){
 				changeColor(Color.RED);
@@ -477,6 +511,10 @@ public class Display extends JComponent implements MouseListener, MouseMotionLis
 			}
 		}
 		
+		/**
+		 * Change all of the cell colors.
+		 * @param c
+		 */
 		private void changeColor(Color c){
 			for (Cell[] ce : cell){
 				for (Cell b : ce){

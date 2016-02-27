@@ -121,11 +121,12 @@ public class Cell {
 		myNeighbors = 0; 
 		for (int xvalue = this.getX()-1; xvalue <= this.getX()+1; xvalue++){
 			for (int yvalue = this.getY()-1; yvalue <= this.getY()+1; yvalue++){
+				
+				//if out of bounds
 				if (xvalue >= Display.COLS || yvalue >= Display.ROWS || xvalue < 0 || yvalue < 0){
-					if (Display.wrap) wrapNeighbor(cell,xvalue,yvalue);	
+					if (Display.wrap) wrapNeighbor(cell,xvalue,yvalue);	 
 				}
 				else{
-					
 					if (cell[yvalue][xvalue].getAlive()) myNeighbors++;
 				}
 			}
